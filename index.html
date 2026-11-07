@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Parcial interactivo de Fundamentos de Sistemas para estudiantes de primer semestre de Técnico en Sistemas.">
+  <title>Parcial interactivo | Fundamentos de Sistemas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" defer></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="hero">
+  <div class="container" style="max-width:950px">
+    <div class="eyebrow mb-2">Evaluación académica · Primer semestre</div>
+    <h1 class="fw-bold mb-2">Fundamentos de Sistemas</h1>
+    <p class="mb-0 opacity-75">Parcial interactivo de hardware y arquitectura de computadores</p>
+  </div>
+  <div class="hero-code" aria-hidden="true">0101 · CPU · RAM · 1010</div>
+</header>
+<main class="container main-wrap pb-4" style="max-width:950px">
+  <section class="surface p-4 mb-4" aria-label="Información del estudiante">
+    <div class="row align-items-center gy-3 mb-3">
+      <div class="col"><h2 class="h5 fw-bold mb-1">Datos del estudiante</h2><p class="text-secondary small mb-0">Completa tus datos antes de presentar el parcial.</p></div>
+      <div class="col-auto"><span class="pill">10 preguntas · Nota máxima: 5,0</span></div>
+    </div>
+    <div class="row g-3">
+      <div class="col-md-6"><label class="form-label fw-semibold" for="student">Nombre completo</label><input id="student" class="form-control" type="text" placeholder="Escribe tu nombre" autocomplete="name" maxlength="100"></div>
+      <div class="col-md-3"><label class="form-label fw-semibold" for="group">Grupo / curso</label><input id="group" class="form-control" type="text" placeholder="Ej. 1A" maxlength="40"></div>
+      <div class="col-md-3"><label class="form-label fw-semibold" for="date">Fecha</label><input id="date" class="form-control" type="date"></div>
+    </div>
+    <div class="alert alert-light border mt-3 mb-0 small" role="note"><strong>Instrucciones:</strong> Lee cada pregunta y selecciona la respuesta correcta. En las preguntas de selección múltiple debes marcar todas las opciones correctas. Cada pregunta vale <strong>0,5 puntos</strong>; las respuestas múltiples se califican completas, sin puntaje parcial.</div>
+  </section>
+  <section class="surface overflow-hidden mb-4" aria-labelledby="q-heading">
+    <div class="p-4 border-bottom d-flex justify-content-between align-items-center gap-3 flex-wrap">
+      <div><h2 id="q-heading" class="h5 fw-bold mb-1">Cuestionario</h2><p class="small text-secondary mb-0">Selecciona tu respuesta en cada pregunta.</p></div>
+      <div class="text-end" style="min-width:160px"><div class="small fw-semibold mb-2" id="progress-label" aria-live="polite">0 de 10 respondidas</div><div class="progress" role="progressbar" aria-label="Progreso del parcial" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" id="progress"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div></div>
+    </div>
+    <form id="exam-form" novalidate><div id="questions"></div>
+      <div class="p-4 border-top no-print" id="actions">
+        <div class="alert alert-warning d-none" role="alert" id="warning"></div>
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3"><span class="small text-secondary" id="remaining">Faltan 10 preguntas por responder.</span><button type="submit" class="btn btn-primary btn-lg px-4 fw-semibold">Finalizar y ver resultado</button></div>
+      </div>
+    </form>
+  </section>
+  <section id="results" class="surface p-4 mb-4 d-none" aria-live="polite" aria-labelledby="result-heading">
+    <div class="row gy-4 align-items-center">
+      <div class="col-sm-7"><span class="pill mb-2 d-inline-block">Evaluación finalizada</span><h2 id="result-heading" class="h4 fw-bold">Tu resultado</h2><p id="student-result" class="text-secondary mb-1"></p><p id="result-message" class="mb-0"></p></div>
+      <div class="col-sm-5 text-sm-end"><div id="score" class="score-number">0,0 <small class="fs-5 fw-normal text-secondary">/ 5,0</small></div><div class="text-secondary mt-2" id="hits"></div></div>
+    </div>
+    <hr>
+    <p class="small text-secondary mb-3">Debajo de cada pregunta podrás revisar la respuesta correcta y compararla con tu selección. También puedes generar un reporte detallado.</p>
+    <div class="d-flex gap-2 flex-wrap no-print"><button type="button" class="btn btn-primary" id="download-btn">Descargar reporte PDF</button><button type="button" class="btn btn-outline-primary" id="print-btn">Imprimir reporte / guardar como PDF</button><button type="button" class="btn btn-outline-secondary" id="restart-btn">Realizar de nuevo</button></div>
+  </section>
+  <section id="report" class="surface p-4 mb-4 d-none" aria-labelledby="report-heading">
+    <div class="d-flex justify-content-between align-items-center gap-2 mb-3 flex-wrap">
+      <div><div class="small text-uppercase fw-bold text-secondary">Informe individual de evaluación</div><h2 class="h4 fw-bold mb-0" id="report-heading">Reporte de calificación</h2></div>
+      <span class="pill">Fundamentos de Sistemas</span>
+    </div>
+    <div class="row g-2 mb-3 small" id="report-info"></div>
+    <div class="row g-2 mb-3">
+      <div class="col-6 col-md-4"><div class="rounded bg-light border p-3"><div class="text-secondary small">Calificación</div><strong class="h4 mb-0" id="report-score"></strong></div></div>
+      <div class="col-6 col-md-4"><div class="rounded bg-light border p-3"><div class="text-secondary small">Aciertos</div><strong class="h4 mb-0" id="report-hits"></strong></div></div>
+      <div class="col-12 col-md-4"><div class="rounded bg-light border p-3"><div class="text-secondary small">Preguntas</div><strong class="h4 mb-0">10</strong></div></div>
+    </div>
+    <p class="text-secondary small">Detalle de las respuestas seleccionadas y la solución correcta de cada pregunta.</p>
+    <div class="table-responsive"><table class="table table-bordered report-table"><thead><tr><th style="width:7%">N.º</th><th style="width:39%">Pregunta</th><th style="width:24%">Respuesta del estudiante</th><th style="width:24%">Respuesta correcta</th><th style="width:6%">Estado</th></tr></thead><tbody id="report-rows"></tbody></table></div>
+    <div class="mt-3 small text-secondary">Criterio de calificación: 0,5 puntos por respuesta completamente correcta. En selección múltiple no hay puntaje parcial.</div>
+  </section>
+  <footer class="text-center footer pb-4">Técnico en Sistemas · Fundamentos de Hardware · Evaluación formativa</footer>
+</main>
+<script src="script.js" defer></script>
+</body>
+</html>
